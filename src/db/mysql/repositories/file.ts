@@ -7,9 +7,10 @@ export class KnexFileRepository implements IFileRepository {
   constructor(private readonly knex: Knex) {}
 
   async create(file: IFile): Promise<IFile> {
-    const [newFile] = await this.knex(Tables.File)
-      .insert({ ...file, id: uuidv4() })
-      .returning("*");
+    const id = uuidv4();
+    await this.knex(Tables.File).insert({ ...file, id });
+
+    const newFile = await this.knex(Tables.File).where({ id }).first();
 
     return newFile;
   }

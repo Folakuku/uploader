@@ -1,22 +1,16 @@
-# Demo Credit API
+# Uploader API
 
-Welcome to the Demo Credit API, you can access the live [API here](https://folahanmi-ojokuku-lendsqr-be-test.onrender.com).
+Welcome to the Uploader API.
 
 #### Entity Relationship Diagram (ERD)
 
-![erd diagram](https://github.com/Folakuku/demo_credit/blob/main/erd_demo_credt.png?raw=true)
+![erd diagram](https://github.com/Folakuku/uploader/blob/main/erd.png?raw=true)
 
 ---
 
 ### Postman Documentation Link
 
-Here is the Postman Documentation [here](https://documenter.getpostman.com/view/24732748/2sAYQfDUej)
-
----
-
-### Explanation Documentation Link.
-
-The Explanation Documentation is found [here](https://docs.google.com/document/d/1tWB147hFl842dFRwh6jPooezAtYiEVhkvkBV6toIvTM/edit?usp=sharing)
+Here is the Postman Documentation [here](https://documenter.getpostman.com/view/24732748/2sAYX2NPk9)
 
 ---
 
@@ -26,9 +20,10 @@ The Explanation Documentation is found [here](https://docs.google.com/document/d
 
 Before proceeding, ensure you have the following installed on your system:
 
--   Node.js(LTS)
--   npm
--   MySQL
+- Node.js(LTS)
+- npm
+- MySQL
+- MongoDB
 
 ### Cloning the Repository
 
@@ -41,13 +36,13 @@ cd /path/to/your/directory
 2. Clone the repository
 
 ```shell
- git clone https://github.com/Folakuku/demo_credit.git
+ git clone https://github.com/Folakuku/uploader.git
 ```
 
 3.  Navigate into the project directory
 
 ```shell
-cd demo_credit
+cd uploader
 ```
 
 ### Installing Dependencies
@@ -60,16 +55,25 @@ npm install
 
 ### Setting Up the Environment Variables
 
+This server was built to work with MongoDB or MySQL, the Database to be used is configured by setting the env variable to `mongodb` or `mysql`
+
 ```shell
-ADJUTOR_API_KEY="your-adjutor-api-key"
-ADJUTOR_APP_ID="your-adjutor-app-id"
-ADJUTOR_API_URL="your-adjutor-api-url"
+DB_TYPE=<"mysql" | "mongodb">
 JWT_SECRET="your-jwt-secret"
-DB_HOST="your-database-host"
-DB_USER="your-database-user"
-DB_PASSWORD="your-database-password"
-DB_NAME="your-database-name"
-DB_TEST_NAME="your-test-database-name"
+MY_SQL_DB_HOST="your-database-host"
+MY_SQL_DB_USER="your-database-user"
+MY_SQL_DB_PASSWORD="your-database-password"
+MY_SQL_DB_NAME="your-database-name"
+MONGO_DB_URI=mongodb://127.0.0.1:27017/uploader
+NAME=Uploader API
+EMAIL_USERNAME=
+EMAIL_PASSWORD=
+EMAIL_HOST=
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+AWS_S3_BUCKET=
+AWS_REGION=
+
 ```
 
 ### Setting Up the Database
@@ -104,12 +108,4 @@ Run the following command to seed the database with initial data:
 
 ```shell
 npm run seed
-```
-
-### Running Tests
-
-To run the test suite, use the following command:
-
-```shell
-npm test
 ```

@@ -12,7 +12,7 @@ export async function up(knex: Knex): Promise<void> {
     table.string("filename").notNullable();
     table.string("s3Key").notNullable();
     table.string("mimetype").notNullable();
-    table.string("size").notNullable();
+    table.integer("size").notNullable();
     table
       .dateTime("createdAt")
       .notNullable()
