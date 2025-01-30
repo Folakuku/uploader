@@ -52,6 +52,30 @@ export const signup = async (req: Request, res: Response) => {
   );
 };
 
+export const resendVerificationCode = async (req: Request, res: Response) => {
+  const { email } = req.body;
+
+  const { userRepository } = await getRepositories();
+
+  //Check for existing users with email
+  const existingUser = await userRepository.findOne({
+    email: email.toLowerCase(),
+  });
+  if (!existingUser) {
+    return errorResponse(res, "Email is not registered", 400);
+  }
+  if (existingUser.isVerified) {
+    return errorResponse(res, "Email already verified", 400);
+  }
+
+  // send verification email
+  const otp = generateRandomNumberString(6);
+  await redis.set(otp, email.toLowerCase(), "EX", 5 * 60);
+  await sendVerificationEmail(email, otp);
+
+  return successResponse(res, "otp sent successfully");
+};
+
 export const login = async (req: Request, res: Response) => {
   const payload = req.body;
   const { email, password } = payload;
@@ -74,6 +98,7 @@ export const login = async (req: Request, res: Response) => {
   const jwt = new JWT();
   const accessToken = jwt.accessToken({ userId: user.id });
 
+  user.password = "";
   successResponse(
     res,
     "user logged in successfully",
@@ -86,10 +111,13 @@ export const login = async (req: Request, res: Response) => {
 };
 
 export const verifyEmail = async (req: Request, res: Response) => {
-  const { otp } = req.body;
+  const { otp, email } = req.body;
 
-  const email = await redis.get(otp);
-  if (!email) {
+  const emailValue = await redis.get(otp);
+  if (!emailValue) {
+    return errorResponse(res, "Invalid or expired otp", 401);
+  }
+  if (email !== emailValue) {
     return errorResponse(res, "Invalid or expired otp", 401);
   }
 

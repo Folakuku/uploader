@@ -7,23 +7,13 @@ export class KnexUserRepository implements IUserRepository {
   constructor(private readonly knex: Knex) {}
 
   async create(user: IUser): Promise<IUser> {
-    const [newUser] = await this.knex(Tables.User)
-      .insert({ ...user, id: uuidv4() })
-      .returning("*");
+    const id = uuidv4();
+    await this.knex(Tables.User).insert({ ...user, id });
 
-    //         // Retrieve create user
-    //   const users = await db(Tables.User)
-    //   .join(Tables.Wallet, "users.id", "=", "wallets.user_id")
-    //   .select(
-    //     "users.id",
-    //     "users.fullname",
-    //     "users.email",
-    //     { wallet_id: "wallets.id" },
-    //     "wallets.balance"
-    //   )
-    //   .where({ email });
-
-    // const user = users[0];
+    const newUser = await this.knex(Tables.User)
+      .select("users.id", "users.fullname", "users.email", "users.isVerified")
+      .where({ id })
+      .first();
 
     return newUser;
   }
@@ -40,10 +30,11 @@ export class KnexUserRepository implements IUserRepository {
     query: Partial<IUser>,
     update: Partial<IUser>
   ): Promise<IUser | null> {
-    await this.knex("table").where(query).update({
-      update,
-    });
+    await this.knex(Tables.User).where(query).update(update);
 
-    return await this.knex("table").where(query).select("last_opening").first();
+    return await this.knex(Tables.User)
+      .where(query)
+      .select("users.id", "users.fullname", "users.email", "users.isVerified")
+      .first();
   }
 }

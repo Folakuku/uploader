@@ -2,25 +2,31 @@ import { Router } from "express";
 import * as authController from "../controllers/auth.controller";
 import { asyncHandler } from "../helpers/handler";
 import validate from "../middlewares/validators/validate";
-import { loginSchema, signupSchema } from "../middlewares/validators/schema";
+import * as schema from "../middlewares/validators/schema";
 
 const router = Router();
 
 router.post(
   "/signup",
-  validate(signupSchema, { body: true }),
+  validate(schema.signupSchema, { body: true }),
   asyncHandler(authController.signup)
 );
 
 router.post(
   "/login",
-  validate(loginSchema, { body: true }),
+  validate(schema.loginSchema, { body: true }),
   asyncHandler(authController.login)
 );
 
 router.post(
+  "/resend-otp",
+  validate(schema.resendOtpSchema, { body: true }),
+  asyncHandler(authController.resendVerificationCode)
+);
+
+router.post(
   "/verify",
-  //   validate(loginSchema, { body: true }),
+  validate(schema.verifyEmailSchema, { body: true }),
   asyncHandler(authController.verifyEmail)
 );
 

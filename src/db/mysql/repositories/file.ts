@@ -26,15 +26,13 @@ export class KnexFileRepository implements IFileRepository {
     query: Partial<IFile>,
     update: Partial<IFile>
   ): Promise<IFile | null> {
-    await this.knex("table").where(query).update({
-      update,
-    });
+    await this.knex(Tables.File).where(query).update(update);
 
-    return await this.knex("table").where(query).select("last_opening").first();
+    return await this.knex(Tables.File).where(query).select("*").first();
   }
 
   async deleteOne(query: Partial<IFile>) {
-    await this.knex("table").where(query).del();
+    await this.knex(Tables.File).where(query).del();
 
     return;
   }

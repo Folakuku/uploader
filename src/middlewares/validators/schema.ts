@@ -25,3 +25,16 @@ export const loginSchema = Joi.object({
     password: Joi.string().required(),
   }),
 }).required();
+
+export const verifyEmailSchema = Joi.object({
+  body: Joi.object({
+    email: Joi.string().email().required(),
+    otp: Joi.string().required(),
+  }),
+}).required();
+
+export const resendOtpSchema = Joi.object({
+  body: Joi.object({
+    email: Joi.string().email().required(),
+  }),
+}).required();
